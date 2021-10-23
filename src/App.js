@@ -1,6 +1,6 @@
 import './App.css';
 import React,{ useEffect, useState } from "react";
-import Weather from './component/weather';
+import Weather from "./Components/weather.js";
 export default function App() {
 
   const [lat, setLat] = useState([]);
@@ -8,26 +8,31 @@ export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function(position){
-      setLat(position.coords.latitude);
-      setLong(position.coords.longitude);
-    });
-    
-  await fetch(`${process.env.REACT_APP_URL}/weather/?lat=${lat}&lon=${long}&units=metrics&units=metrics&APPID=${process.env.REACT_APP_KEY}`)
-      .then(res => res.json())
-      .then(result => {
-        setData(result)
-        console.log(result)
-        console.log(result);
+    const fetchData = async () => {
+      navigator.geolocation.getCurrentPosition(function(position){
+        setLat(position.coords.latitude);
+        setLong(position.coords.longitude);
       });
+    
+    await fetch(`${process.env.REACT_APP_API_URL}/weather/?lat=${lat}&lon=${long}&units=metrics&units=metric&APPID=${process.env.REACT_APP_API_KEY}`)
+        .then(res => res.json())
+        .then(result => {
+          setData(result)
+          console.log(result)
+          console.log(result);
+        });
+   }
+   fetchData();
+}, [lat,long])
 
-    console.log("Latitude is:",lat)
-    console.log("Longitude is:",long)
-  }, [lat, long]);
-
-  return (
+return (
     <div className ="App">
-      Weather Application using React.
+      {(typeof data.main != 'undefined') ? (
+        <Weather weatherData = {data}/>
+      ): (
+        <div></div>
+      )}
+      
     </div>
   );
 }
