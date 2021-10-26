@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { Row, Collapse, FormControl, Button, Col } from "react-bootstrap";
+import { API_KEY, API_BASE_URL } from "../apis/config";
 
 
 const CitySelector = () => {
-      const [city, setCity] = useState('');
 
+      const onSearch = () => {
+            fetch(`${ API_BASE_URL}/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`)
+            .then((response) => response.json())
+            .then((result) => console.log(result));
+      };
+
+      const [city, setCity] = useState('');
       return(
             <>
             <Row>
@@ -15,7 +22,7 @@ const CitySelector = () => {
 
             <Row>
                  {/* xs={4} takes the one third  of the page*/}
-                  <Col xs={4} className = "text-cemter">
+                  <Col xs={4} className = "text-center">
                         <FormControl
                               placeholder ="Enter City"
                               //update city value with the users input
@@ -29,7 +36,7 @@ const CitySelector = () => {
             <Row>
                   <Col>
                         {/* Event handler for button click */}
-                        <Button onClick = 'onSearch'>Check Weather</Button>
+                        <Button onClick = {onSearch}>Check Weather</Button>
                   </Col>
             </Row>
       </>
