@@ -1,39 +1,21 @@
+import React from 'react';
+import WeatherCard from './Components/WeatherCard';
 import './App.css';
-import React,{ useEffect, useState } from "react";
-import Weather from "./Components/weather.js";
-export default function App() {
 
-  const [lat, setLat] = useState([]);
-  const [long, setLong] = useState([]);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      navigator.geolocation.getCurrentPosition(function(position){
-        setLat(position.coords.latitude);
-        setLong(position.coords.longitude);
-      });
-    
-    await fetch(`${process.env.REACT_APP_API_URL}/weather/?lat=${lat}&lon=${long}&units=metrics&units=metric&APPID=${process.env.REACT_APP_API_KEY}`)
-        .then(res => res.json())
-        .then(result => {
-          setData(result)
-          console.log(result)
-          console.log(result);
-        });
-   }
-   fetchData();
-}, [lat,long])
-
-return (
-    <div className ="App">
-      {(typeof data.main != 'undefined') ? (
-        <Weather weatherData = {data}/>
-      ): (
-        <div></div>
-      )}
+const App = () => {
+  return (
+    <div className="App">
+      {/* dt is in unix-seconds but javascript uses milliseconds, multiply with 1000 */}
+      <WeatherCard
+        dt={1602104400 * 1000}
+        temp_min="22.67"
+        temp_max="24.39"
+        main="Clear"
+        icon="01d"
+      />
       
     </div>
   );
-}
+};
 
+export default App;
