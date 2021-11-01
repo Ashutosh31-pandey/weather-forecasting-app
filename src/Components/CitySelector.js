@@ -11,6 +11,12 @@ const CitySelector = () => {
             .then((result) => console.log(result));
       };
 
+      const onKeyDown = (event) => {
+            if (event.keyCode === 13){
+             onSearch();
+            }
+      };
+
       const [city, setCity] = useState('');
       return(
             <>
@@ -28,9 +34,10 @@ const CitySelector = () => {
                               //update city value with the users input
                               onChange = {(event) => setCity(event.target.value)}
                               //value will be the currently selected city
-                              value = {city}
+                              value ={city}
+                              onKeyDown={onKeyDown}
                         />
-                        </Col> 
+                  </Col> 
             </Row>
 
             <Row>
