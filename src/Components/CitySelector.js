@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import { Row, Collapse, FormControl, Button, Col } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Row, Col, FormControl, Button} from 'react-bootstrap';
 import { API_KEY, API_BASE_URL } from "../apis/config";
 
-
-const CitySelector = () => {
-
-      const onSearch = () => {
-            fetch(`${ API_BASE_URL}/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`)
-            .then((response) => response.json())
-            .then((result) => console.log(result));
-      };
-
-      const onKeyDown = (event) => {
-            if (event.keyCode === 13){
-             onSearch();
-            }
-      };
-
+const CitySelector = ({onSearch}) => {
       const [city, setCity] = useState('');
+      const [results, setResults] = useState(null);
+
+      onSearch = () => {
+            fetch(
+              `${API_BASE_URL}/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`
+            )
+              .then((response) => response.json())
+              // update the results
+              .then((results) => setResults(results));
+          };
+
       return(
             <>
             <Row>
@@ -28,14 +25,13 @@ const CitySelector = () => {
 
             <Row>
                  {/* xs={4} takes the one third  of the page*/}
-                  <Col xs={4} className = "text-center">
+                  <Col xs={4}>
                         <FormControl
                               placeholder ="Enter City"
                               //update city value with the users input
                               onChange = {(event) => setCity(event.target.value)}
                               //value will be the currently selected city
-                              value ={city}
-                              onKeyDown={onKeyDown}
+                              value = {city}
                         />
                   </Col> 
             </Row>
@@ -43,7 +39,7 @@ const CitySelector = () => {
             <Row>
                   <Col>
                         {/* Event handler for button click */}
-                        <Button onClick = {onSearch}>Check Weather</Button>
+                        <Button onClick={() => onSearch(city)}>Check Weather</Button>
                   </Col>
             </Row>
       </>
